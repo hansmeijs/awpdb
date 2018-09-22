@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}Activate account{% endblock %}
+{% block content %}
+    {% csrf_token %}
+    <p>{% trans 'You have successfully confirmed your email address.' %}
+    <p>{% trans 'You are now logged in.' %}</p>
+    <a href="{% url 'home' %}" class="btn btn-primary btn_minwidth">OK</a>
+{% endblock %}

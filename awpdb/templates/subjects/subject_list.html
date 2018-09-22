@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load menu %}{% generate_menu %}
+{% load static %}
+
+{% block menu_block %}{% with menu=menus.user %}{% include "menu.html" %}{% endwith %}{% endblock %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb my-3">
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">AWP online</a></li>
+    <li class="breadcrumb-item">
+      {{ user.country }}
+      {% if user.country_locked %}<img src="{% static 'img/padlock.gif' %}" height="16" width="16">{% endif %}
+    </li>
+    <li class="breadcrumb-item">
+      {{ user.examyear_str }}
+      {% if user.examyear_padlock %}<img src="{% static 'img/padlock.gif' %}" height="16" width="16">{% endif %}
+    </li>
+    <li class="breadcrumb-item active">{% trans 'Subjects' %}</li>
+  </ol>
+{% endblock %}
+
+{% block content %}
+  {% if user.enable_subjects_view %}
+    {% if user.enable_subjects_modify %}
+      <div class="mb-3"><a href="{% url 'subject_add_url' %}" class="btn btn-primary">{% trans 'Add subject' %}</a></div>
+    {% endif %}
+
+    <h4>{% trans 'Subjects' %} {{ user.examyear }} {{ user.country }}</h4>
+
+    <table class="table table table-condensed">
+      <thead class="thead-inverse">
+        <tr>
+          <th>{% trans 'Name' %}</th>
+          <th>{% trans 'Abbreviation' %}</th>
+          <th>{% trans 'Sequence' %}</th>
+          <th>{% trans 'Modified by' %}</th>
+          <th>{% trans 'Modified at' %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for subject in subjects.all %}
+          <tr>
+            <td>
+              {% if user.is_role_insp_or_system %}
+                <a>{{ subject.name }}</a>
+              {% else %}
+                <a>{{ subject.name }}</a>
+              {% endif %}
+            </td>
+            <td><a>{{ subject.abbrev }}</a></td>
+            <td><a>{{ subject.sequence }}</a></td>
+            <td>{{ subject.modified_by }}</td>
+            <td>{{ subject.modified_at }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% if is_paginated %}
+      <ul class="pagination">
+        {% if page_obj.has_previous %}
+          <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+        {% for i in paginator.page_range %}
+          {% if page_obj.number == i %}
+            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+          {% else %}
+            <li><a href="?page={{ i }}">{{ i }}</a></li>
+          {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+          <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+      </ul>
+    {% endif %}
+
+  {% else %}
+    <div class="alert alert-danger">{{ user.message_subjects_view }}</div>
+    <a href="{% url 'home' %}" class="btn btn-outline-primary">{% trans 'Cancel' %}</a>
+  {% endif %}
+{% endblock %}l>

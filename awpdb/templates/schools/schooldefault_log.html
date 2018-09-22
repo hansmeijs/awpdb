@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load menu %}{% generate_menu %}
+
+{% block menu_block %}{% with menu=menus.user %}{% include "menu.html" %}{% endwith %}{% endblock %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb my-3">
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">AWP online</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'schooldefault_list_url' %}">{% trans 'Default schools' %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'schooldefault_edit_url' schooldefault.pk %}">{{ schooldefault.name }}</a></li>
+    <li class="breadcrumb-item active">{% trans 'Log' %}</li>
+  </ol>
+{% endblock %}
+
+{% block content %}
+  {% if user.enable_default_items_modify %}
+      <h4>{% trans 'Log of ' %}{{ schooldefault.name }}</h4>
+      <table class="table table table-condensed">
+        <thead class="thead-inverse">
+          <tr>
+            <th>{% trans 'Schoolname' %}</th>
+            <th>{% trans 'Schoolcode' %}</th>
+            <th>{% trans 'Abbreviation' %}</th>
+            <th>{% trans 'Article' %}</th>
+            <th>{% trans 'Country' %}</th>
+            <th>{% trans 'Is template' %}</th>
+            <th>{% trans 'Inactive' %}</th>
+            <th>{% trans 'Modified by' %}</th>
+            <th>{% trans 'Modified at' %}</th>
+            <th>{% trans 'Action' %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in schooldefault_log.all %}
+            <tr>
+              <td>{{ item.name }}</a></td>
+              <td>{{ item.code }}</a></td>
+              <td>{{ item.abbrev }}</a></td>
+              <td>{{ item.article }}</a></td>
+              <td>{{ item.country }}</a></td>
+              <td>{{ item.is_template }}</a></td>
+              <td>{{ item.is_active }}</a></td>
+              <td>{{ item.modified_by }}</td>
+              <td>{{ item.modified_at }}</td>
+              <td>{{ item.mode_str }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <a href="{% url 'schooldefault_list_url' %}" class="btn btn-outline-primary">{% trans 'Close' %}</a>
+  {% else %}
+    <div class="alert alert-danger">{{ user.message_default_items_modify }}</div>
+    <a href="{% url 'home' %}" class="btn btn-outline-primary">{% trans 'Cancel' %}</a>
+  {% endif %}
+{% endblock %}l>

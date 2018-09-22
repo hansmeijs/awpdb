@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load menu %}{% generate_menu %}
+
+{% block menu_block %}{% with menu=menus.user %}{% include "menu.html" %}{% endwith %}{% endblock %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb my-3">
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">AWP online</a></li>
+    <li class="breadcrumb-item"><a>{{ subjectdefault.country }}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'subjectdefault_list_url' %}">{% trans 'Default subjects' %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'subjectdefault_edit_url' subjectdefault.pk %}">{{ subjectdefault.name }}</a></li>
+    <li class="breadcrumb-item active">{% trans 'History' %}</li>
+  </ol>
+{% endblock %}
+
+{% block content %}
+  {% if user.enable_subjectdefault_modify %}
+    <h4>{% trans 'History of:' %} {{ subjectdefault.name }}</h4>
+    <table class="table table table-condensed">
+      <thead class="thead-inverse">
+        <tr>
+          <th>{% trans 'Name' %}</th>
+          <th>{% trans 'Abbreviation' %}</th>
+          <th>{% trans 'Sequence' %}</th>
+          <th>{% trans 'Departments' %}</th>
+          <th>{% trans 'Active' %}</th>
+          <th>{% trans 'Country' %}</th>
+          <th>{% trans 'Modified by' %}</th>
+          <th>{% trans 'Modified at' %}</th>
+          <th>{% trans 'Action' %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in subjectdefault_log.all %}
+          <tr>
+            <td>{% if item.name_mod %}<b>{% endif %}{{ item.name }}</b></td>
+            <td>{% if item.abbrev_mod %}<b>{% endif %}{{ item.abbrev }}</b></td>
+            <td>{% if item.sequence_mod %}<b>{% endif %}{{ item.sequence }}</b></td>
+            <td>{% if item.departments_mod %}<b>{% endif %}{{ item.dep_list_str }}</b></td>
+            <td>{% if item.is_active_mod %}<b>{% endif %}{{ item.is_active_str }}</b></td>
+            <td>{% if item.country_mod %}<b>{% endif %}{{ item.country }}</b></td>
+            <td>{{ item.modified_by }}</td>
+            <td>{{ item.modified_at }}</td>
+            <td>{{ item.mode_str }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="mb-3">
+      <a href="{% url 'subjectdefault_list_url' %}" class="btn btn-outline-primary">{% trans 'Close' %}</a>
+    </div>
+  {% else %}
+    <div class="alert alert-danger">{{ user.message_subjectdefault_modify }}</div>
+    <a href="{% url 'home' %}" class="btn btn-outline-primary">{% trans 'Cancel' %}</a>
+  {% endif %}
+{% endblock %}l>

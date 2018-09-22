@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load menu %}{% generate_menu %}
+{% load static %}
+
+{% block menu_block %}{% with menu=menus.user %}{% include "menu.html" %}{% endwith %}{% endblock %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb my-3">
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">AWP online</a></li>
+    <li class="breadcrumb-item active">{% trans 'Countries' %}</li>
+  </ol>
+{% endblock %}
+
+{% block content %}
+  {% if user.enable_country_view %}
+    {% if user.enable_country_modify %}
+      <div class="mb-3"><a  href="{% url 'country_add_url' %}" class="btn btn-primary">{% trans 'Add country' %}</a></div>
+    {% endif %}
+    <h4>{% trans 'Countries' %}</h4>
+    <table class="table table table-condensed">
+      <thead class="thead-inverse">
+        <tr>
+          <th>{% trans 'Country' %}</th>
+          <th>{% trans 'Abbreviation' %}</th>
+          <th>{% trans 'Locked' %}</th>
+          <th>{% trans 'Modified by' %}</th>
+          <th>{% trans 'Modified at' %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in countries.all %}
+          <tr>
+            <td>
+            {% if user.enable_country_modify %}
+              <a href="{% url 'country_edit_url' item.pk %}">{{ item.name }}</a>
+            {% else %}
+              {{ item.name }}
+            {% endif %}
+            {% if item.locked %}<img src="{% static 'img/padlock.gif' %}" height="16" width="16">{% endif %}
+            </td>
+            <td>{{ item.abbrev }}</td>
+            <td>{{ item.locked_str }}</td>
+            <td>{{ item.modified_by }}</td>
+            <td>{{ item.modified_at }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="alert alert-danger">{{ user.message_country_view }}</div>
+    <a href="{% url 'home' %}" class="btn btn-outline-primary">{% trans 'Cancel' %}</a>
+  {% endif %}
+{% endblock %}l>

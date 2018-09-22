@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load menu %}{% generate_menu %}
+
+{% block title %}{{ block.super }}{% endblock %}
+{% block menu_block %}{% with menu=menus.user %}{% include "menu.html" %}{% endwith %}{% endblock %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb my-3">
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">AWP online</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'user_list_url' %}">{% trans 'Users' %}</a></li>
+    <li class="breadcrumb-item active">{% trans 'Add user' %}</li>
+  </ol>
+{% endblock %}
+
+{% block content %}
+  {% if user.enable_user_view_modify %}
+    <h4>{% trans 'Add user' %}</h4>
+    <form method="post" novalidate>
+      {% csrf_token %}
+       <input type="hidden" name="next" value="{{ next }}">
+      {% include 'includes/form.html' %}
+      <div class="mb-3">
+        <button type="submit" class="btn btn-success">{% trans 'Save' %}</button>
+        <a href="{% url 'user_list_url' %}" class="btn btn-outline-secundary">Cancel</a>
+      </div>
+    </form>
+  {% else %}
+    <div class="alert alert-danger">{{ user.message_user_view_modify }}</div>
+    <a href="{% url 'home' %}" class="btn btn-outline-primary">{% trans 'Cancel' %}</a>
+  {% endif %}
+{% endblock %}

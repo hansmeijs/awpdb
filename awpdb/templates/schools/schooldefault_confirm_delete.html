@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load menu %}{% generate_menu %}
+{% load static %}
+
+{% block menu_block %}{% with menu=menus.user %}{% include "menu.html" %}{% endwith %}{% endblock %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb my-3">
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">AWP online</a></li>
+    <li class="breadcrumb-item">{{ user.country }}
+      {% if user.country_locked %}<img src="{% static 'img/padlock.gif' %}" height="16" width="16">{% endif %}
+    </li>
+    <li class="breadcrumb-item"><a href="{% url 'schooldefault_list_url' %}">{% trans 'Default schools' %}</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'schooldefault_edit_url' schooldefault.pk %}">{{ schooldefault.name }}</a></li>
+    <li class="breadcrumb-item active">{% trans 'Delete' %}</li>
+  </ol>
+{% endblock %}
+
+{% block content %}
+  {% if user.is_authenticated %}
+    <form method="post" novalidate>
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ next }}">
+      <h4>{% trans 'Delete default school' %}: {{ schooldefault.name }}</h4>
+      <p>{% trans 'Are you sure you want to delete default school ' %}{{ schooldefault.name }}?</p>
+      <button type="submit" class="btn btn-outline-danger"  name='delete_this' value='DelThis'>{% trans 'Yes, delete' %}</button>
+      <a href="{% url 'schooldefault_list_url' %}" class="btn btn-outline-primary">{% trans 'No, cancel' %}</a>
+    </form>
+  {% else %}
+    <form class="form-inline ml-auto">
+      <a href="{% url 'login' %}" class="btn btn-outline-secundary">{% trans 'You must be logged in to view this page' %}</a>
+    </form>
+  {% endif %}
+{% endblock %}

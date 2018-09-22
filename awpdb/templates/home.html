@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load menu %}{% generate_menu %}
+{% load static %}
+
+{% block menu_block %}
+    {% with menu=menus.user %}
+        {% include "menu.html" %}
+    {% endwith %}
+{% endblock %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb my-3">
+    <li class="breadcrumb-item"><a href="#">AWP online</a></li>
+  </ol>
+{% endblock %}
+
+{% block content %}
+  <h3>{% trans 'Replace the AWP-download program' %}</h3>
+    <p>
+        <a>{% trans 'Before AWP can download the new version AWP 2018.01 from the internet, the AWP-download program must be replaced.' %}</a>
+        <a>{% trans 'This cannot be done with an update, but has to be replaced manually.' %}</a>
+        <a>{% trans 'Click Download to download the new AWP-download program and the instructions how to install it.' %}</a>
+    </p>
+    <table class="table">
+      <thead class="thead-inverse">
+        <tr>
+          <th>{% trans 'Description' %}</th>
+          <th>{% trans 'Download' %}</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr>
+            <td class="align-left">
+              {% trans 'Download the AWP-download program' %}
+            </td>
+            <td class="align-middle">
+              <a href="{% static 'data/UpdateAwpLaunch2.exe' %}" class="btn btn-primary">{% trans 'Download' %}</a>
+            </td>
+          </tr>
+          <tr>
+            <td class="align-left">
+              <a>{% trans 'Download instructions in Dutch' %}</a>
+            </td>
+            <td class="align-middle">
+              <a href="{% static 'data/AWP2018_Download_Handleiding.pdf' %}" class="btn btn-primary">{% trans 'Download' %}</a>
+            </td>
+          </tr>
+          <tr>
+            <td class="align-left">
+              <a>{% trans 'Download instructions in English' %}</a>
+            </td>
+            <td class="align-middle">
+              <a href="{% static 'data/AWP2018_Download_Instructions.pdf' %}" class="btn btn-primary">{% trans 'Download' %}</a>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+{% endblock %}

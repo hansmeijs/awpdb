@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load menu %}{% generate_menu %}
+
+{% block menu_block %}{% with menu=menus.user %}{% include "menu.html" %}{% endwith %}{% endblock %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb my-3">
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">AWP online</a></li>
+    <li class="breadcrumb-item"><a>{{ subjectdefault.country.name }}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'subjectdefault_list_url' %}">{% trans 'Default subjects' %}</a></li>
+    <li class="breadcrumb-item">{{ subjectdefault.name }}</li>
+    <li class="breadcrumb-item active">Delete</li>
+  </ol>
+{% endblock %}
+
+{% block content %}
+  {% if user.is_authenticated %}
+    {% if user.is_role_insp_or_system_and_perm_admin %}
+      <form method="post" novalidate>
+        {% csrf_token %}
+         <input type="hidden" name="next" value="{{ next }}">
+          <h4>{% trans 'Delete default subject:' %} {{ subjectdefault.name }}</h4>
+          <p>Are you sure you want to delete default subject {{ object }}?</p>
+        <button type="submit" class="btn btn-outline-danger"  name='delete_this' value='DelThis'>Yes, delete</button>
+        <a href="{% url 'subjectdefault_list_url' %}" class="btn btn-outline-primary">No, cancel</a>
+      </form>
+    {% else %}
+      <form class="form-inline ml-auto">
+        <a href="{% url 'home' %}" class="btn btn-outline-secundary">{% trans "You don't have permission to view this page." %}</a>
+      </form>
+    {% endif %}
+  {% else %}
+    <form class="form-inline ml-auto">
+      <a href="{% url 'login' %}" class="btn btn-outline-secundary">You must be logged in to view this page</a>
+    </form>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load menu %}{% generate_menu %}
+
+{% block menu_block %}{% with menu=menus.user %}{% include "menu.html" %}{% endwith %}{% endblock %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb my-3">
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">AWP online</a></li>
+    <li class="breadcrumb-item"><a>{{ examyear.country }}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'examyear_list_url' %}">{% trans 'Exam years' %}</a></li>
+    <li class="breadcrumb-item">{{ examyear.examyear }}</li>
+    <li class="breadcrumb-item active">Delete</li>
+  </ol>
+{% endblock %}
+
+{% block content %}
+  {% if not user.enable_examyear_modify %}
+    <form method="post" novalidate>
+      {% csrf_token %}
+       <input type="hidden" name="next" value="{{ next }}">
+        <h4>{% trans 'Delete exam year' %} {{ examyear.examyear }}</h4>
+        <p>Are you sure you want to delete exam year {{ object }}?</p>
+      <button type="submit" class="btn btn-outline-danger"  name='delete_this' value='DelThis'>Yes, delete</button>
+      <a href="{% url 'examyear_list_url' %}" class="btn btn-outline-primary">No, cancel</a>
+    </form>
+  {% else %}
+    <a href="{% url 'examyear_list_url' %}" class="btn btn-outline-primary">{% trans 'Cancel' %}</a>
+  {% endif %}
+{% endblock %}

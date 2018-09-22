@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load menu %}{% generate_menu %}
+{% load static %}
+
+{% block menu_block %}{% with menu=menus.user %}{% include "menu.html" %}{% endwith %}{% endblock %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb my-3">
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">AWP online</a></li>
+    <li class="breadcrumb-item">{{ user.country }}
+      {% if user.country_locked %}<img src="{% static 'img/padlock.gif' %}" height="16" width="16">{% endif %}
+    </li>
+    <li class="breadcrumb-item">{{ user.examyear_str }}
+      {% if user.examyear_padlock %}<img src="{% static 'img/padlock.gif' %}" height="16" width="16">{% endif %}
+    </li>
+    <li class="breadcrumb-item active">{% trans 'Schools' %}</li>
+  </ol>
+{% endblock %}
+
+{% block content %}
+  {% if user.enable_schools_view %}
+    {% if user.enable_schools_add_delete %}
+      <div class="mb-3">
+        <a href="{% url 'school_add_url' %}" class="btn btn-primary">{% trans 'Add school' %}</a>
+      </div>
+    {% endif %}
+
+        <h4>{% trans 'Schools' %} {{ user.country.name }} {{ user.examyear }}</h4>
+
+        <table class="table table table-condensed">
+          <thead class="thead-inverse">
+            <tr>
+              <th>{% trans 'Schoolname' %}</th>
+              <th>{% trans 'Schoolcode' %}</th>
+              <th>{% trans 'Abbrev' %}</th>
+              <th>{% trans 'Article' %}</th>
+              <th>{% trans 'Departments' %}</th>
+              <th>{% trans 'Master' %}</th>
+              <th>{% trans 'Active' %}</th>
+              <th>{% trans 'Exam year' %}</th>
+              <th>{% trans 'Modified by' %}</th>
+              <th>{% trans 'Modified at' %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in schools.all %}
+              <tr>
+                <td>
+                  {% if user.enable_schools_edit %}<a href="{% url 'school_edit_url' item.pk %}">{% endif %}
+                  {{ item.name }}</a>
+                </td>
+                <td>{{ item.code }}</td>
+                <td>{{ item.abbrev}}</td>
+                <td>{{ item.article}}</td>
+                <td>{{ item.dep_list}}</td>
+                <td>{{ item.is_master_str}}</td>
+                <td>{{ item.is_active_str }}</td>
+                <td>{{ item.examyear}}</td>
+                <td>{{ item.modified_by }}</td>
+                <td>{{ item.modified_at }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+  {% else %}
+    <div class="alert alert-danger">{{ user.message_schools_view }}</div>
+    <a href="{% url 'home' %}" class="btn btn-outline-primary">{% trans 'Cancel' %}</a>
+  {% endif %}
+{% endblock %}l>
