@@ -207,42 +207,42 @@ LOGGING = {
             'level': 'DEBUG',
             'filters': ['require_debug_true'],
             'class': 'logging.FileHandler',
-            'filename': '/dev/awpdb/awpdb/dev_accounts_log.log',
+            'filename': config('LOGGER_BASEDIR') + 'dev_accounts_log.log',
             'formatter': 'verbose'
         },
         'dev_awpdb_log': {
             'level': 'DEBUG',
             'filters': ['require_debug_true'],
             'class': 'logging.FileHandler',
-            'filename': '/dev/awpdb/awpdb/dev_awpdb_log.log',
+            'filename': config('LOGGER_BASEDIR') + 'dev_awpdb_log.log',
             'formatter': 'verbose'
         },
         'dev_importing_log': {
             'level': 'DEBUG',
             'filters': ['require_debug_true'],
             'class': 'logging.FileHandler',
-            'filename': '/dev/awpdb/awpdb/dev_importing_log.log',
+            'filename': config('LOGGER_BASEDIR') + 'dev_importing_log.log',
             'formatter': 'verbose'
         },
         'dev_schools_log': {
             'level': 'DEBUG',
             'filters': ['require_debug_true'],
             'class': 'logging.FileHandler',
-            'filename': '/dev/awpdb/awpdb/dev_schools_log.log',
+            'filename': config('LOGGER_BASEDIR') + 'dev_schools_log.log',
             'formatter': 'verbose'
         },
         'dev_students_log': {
             'level': 'DEBUG',
             'filters': ['require_debug_true'],
             'class': 'logging.FileHandler',
-            'filename': '/dev/awpdb/awpdb/dev_students_log.log',
+            'filename': config('LOGGER_BASEDIR') + 'dev_students_log.log',
             'formatter': 'verbose'
         },
         'dev_subjects_log': {
             'level': 'DEBUG',
             'filters': ['require_debug_true'],
             'class': 'logging.FileHandler',
-            'filename': '/dev/awpdb/awpdb/dev_subjects_log.log',
+            'filename': config('LOGGER_BASEDIR') + 'dev_subjects_log.log',
             'formatter': 'verbose'
         },
         'console': {
